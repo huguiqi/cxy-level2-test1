@@ -1,10 +1,12 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/dept">部门信息管理</router-link> |
+      <router-link to="/employee">员工信息管理</router-link> |
+      <router-link to="/kpi">员工考核管理</router-link> |
+      <router-link to="/ana">数据分析管理</router-link>
     </nav>
-    <router-view/>
+    <router-view/> 
   </div>
 </template>
 
