@@ -192,7 +192,7 @@ export default {
     }
   },
   mounted: function(){
-      this.queryData();
+      // this.queryData();
   }
 
 }
