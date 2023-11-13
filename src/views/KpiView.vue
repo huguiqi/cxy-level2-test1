@@ -3,7 +3,7 @@
       <h1>绩效考核管理</h1>
       <el-form :inline="true">
         <el-form-item>
-          <el-input v-model="queryForm.id"  placeholder="员工编号" class="inputVal"></el-input>
+          <el-input v-model="queryForm.empId"  placeholder="员工编号" class="inputVal"></el-input>
         </el-form-item>
         <el-form-item>
           <el-input v-model="queryForm.empName"  placeholder="员工姓名" class="inputVal"></el-input>
@@ -36,6 +36,11 @@
           {{scope.row.position}}
         </template>
       </el-table-column>
+      <el-table-column label="KPI">
+        <template slot-scope="scope">
+          {{scope.row.kpi}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" @click="showCheckDialog(scope.row)">考核员工</el-button>
@@ -58,7 +63,7 @@
               <el-input v-model="kpiForm.position" readonly placeholder="职位" ></el-input>
               <el-input v-model="kpiForm.kpi" readonly placeholder="当年KPI" ></el-input>
               <el-input v-model="kpiForm.checker" placeholder="评价人"></el-input>
-              <el-input v-model="kpiForm.checkComment" type="textarea" placeholder="评价意见"></el-input>
+              <el-input v-model="kpiForm.comments" type="textarea" placeholder="评价意见"></el-input>
               <el-button type="primary" @click="checkSave()">确认</el-button>
               <el-button type="primary" @click="visibleDialogKpi=false">取消</el-button>
             </el-form-item>
@@ -83,13 +88,13 @@ export default {
       pageNum: 1,
       visibleDialogKpi: false,
       queryForm: {"empId":"","empName":"","kpi":""},
-      kpiForm:{"empId":"","empName":"","dept":"","position":"","kpi":"","checker":"","checkComment":""},
+      kpiForm:{"empId":"","empName":"","dept":"","position":"","kpi":"","checker":"","comments":""},
       tableData: [
-        {"id":"1","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","checkComment":"有功劳"},
-        {"id":"2","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","checkComment":"有功劳"},
-        {"id":"3","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","checkComment":"有功劳"},
-        {"id":"4","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","checkComment":"有功劳"},
-        {"id":"5","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","checkComment":"有功劳"}
+        {"id":"1","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"70"},
+        {"id":"2","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
+        {"id":"3","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
+        {"id":"4","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
+        {"id":"5","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"}
       ]
     }
   },
@@ -117,7 +122,7 @@ export default {
       this.kpiForm.dept = row.dept;
       this.kpiForm.position = row.position;
       this.kpiForm.checker = row.manager;
-      this.kpiForm.checkComment = row.checkComment;
+      this.kpiForm.comments = row.comments;
 
       this.visibleDialogKpi = true;
 

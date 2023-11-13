@@ -55,6 +55,11 @@
           {{scope.row.salary}}
         </template>
       </el-table-column>
+      <el-table-column label="审批时间">
+        <template slot-scope="scope">
+          {{scope.row.updateTime}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" @click="showEditDialog(scope.row)">编辑</el-button>
@@ -109,7 +114,7 @@
               <el-input v-model="raiseSalaryForm.empName" readonly placeholder="员工名称"></el-input>
               <el-input v-model="raiseSalaryForm.dept" readonly placeholder="所在部门"></el-input>
               <el-input v-model="raiseSalaryForm.position" readonly placeholder="职位" ></el-input>
-              <el-input v-model="raiseSalaryForm.salary" placeholder="涨薪幅度"></el-input>
+              <el-input v-model="raiseSalaryForm.salary" placeholder="涨薪幅度(%)"></el-input>
               <el-input v-model="raiseSalaryForm.approver" placeholder="审批人"></el-input>
               <el-input v-model="raiseSalaryForm.approveComment" type="textarea" placeholder="审批意见"></el-input>
               <el-button type="primary" @click="raiseSalaryApply()">确认</el-button>
@@ -137,14 +142,14 @@ export default {
       visibleDialogAdd: false,
       visibleDialogEdit: false,
       visibleDialogRaiseSalary: false,
-      queryForm: {"id":"","name":"","dept":"","position":"","salary":""},
-      raiseSalaryForm:{"empId":"","empName":"","dept":"","position":"","salary":"","approver":"审批人","approveComment":"审批意见"},
+      queryForm: {"id":"","name":"","dept":"","position":"","salary":"","updateTime":""},
+      raiseSalaryForm:{"empId":"","empName":"","dept":"","position":"","salary":10.34,"approver":"审批人","approveComment":"审批意见"},
       tableData: [
-        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45},
-        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45},
-        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45},
-        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45},
-        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45}
+        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45,"updateTime":"2021-10-21 14:23:22"},
+        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45,"updateTime":"2021-10-21 14:23:22"},
+        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45,"updateTime":"2021-10-21 14:23:22"},
+        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45,"updateTime":"2021-10-21 14:23:22"},
+        {"id":"111","name":"bob","dept":"工程部","position":"讲师","salary":2500.45,"updateTime":"2021-10-21 14:23:22"}
       ],
       addData:{"id":"","name":"","dept":"","position":"","salary":"","addOrEdit":"add"},
       editData:{"id":"","name":"","dept":"","position":"","addOrEdit":"edit"},
@@ -162,7 +167,7 @@ export default {
         })
         .catch(error=>{
           console.log('打印错误信息'+error)
-          this.tableData = [{"id":"","name":"","dept":"","position":"","salary":1200.34}];
+          // this.tableData = [{"id":"","name":"","dept":"","position":"","salary":1200.34}];
         })
     },
     currentPage(iPage){
