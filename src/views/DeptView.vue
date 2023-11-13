@@ -191,8 +191,9 @@ export default {
       console.log("ids=",this.delIds); 
     }
   },
+
   mounted: function(){
-      // this.queryData();
+      this.queryData();
   }
 
 }
