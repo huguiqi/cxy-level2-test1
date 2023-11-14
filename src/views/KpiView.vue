@@ -3,10 +3,10 @@
       <h1>绩效考核管理</h1>
       <el-form :inline="true">
         <el-form-item>
-          <el-input v-model="queryForm.empId"  placeholder="员工编号" class="inputVal"></el-input>
+          <el-input v-model="queryForm.id"  placeholder="员工编号" class="inputVal"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="queryForm.empName"  placeholder="员工姓名" class="inputVal"></el-input>
+          <el-input v-model="queryForm.name"  placeholder="员工姓名" class="inputVal"></el-input>
         </el-form-item>
         <el-form-item>
           <el-input v-model="queryForm.kpi"  placeholder="当年KPI" class="inputVal"></el-input>
@@ -61,8 +61,8 @@
               <el-input v-model="kpiForm.empName" readonly placeholder="员工名称"></el-input>
               <el-input v-model="kpiForm.dept" readonly placeholder="所在部门"></el-input>
               <el-input v-model="kpiForm.position" readonly placeholder="职位" ></el-input>
-              <el-input v-model="kpiForm.kpi" readonly placeholder="当年KPI" ></el-input>
-              <el-input v-model="kpiForm.checker" placeholder="评价人"></el-input>
+              <el-input v-model="kpiForm.kpi" type="number" min="0" max="100" :precision="2" placeholder="当年KPI(最高100分)" ></el-input>
+              <el-input v-model="kpiForm.leader" placeholder="评价人"></el-input>
               <el-input v-model="kpiForm.comments" type="textarea" placeholder="评价意见"></el-input>
               <el-button type="primary" @click="checkSave()">确认</el-button>
               <el-button type="primary" @click="visibleDialogKpi=false">取消</el-button>
@@ -87,20 +87,20 @@ export default {
       pageSize: 5,
       pageNum: 1,
       visibleDialogKpi: false,
-      queryForm: {"empId":"","empName":"","kpi":""},
-      kpiForm:{"empId":"","empName":"","dept":"","position":"","kpi":"","checker":"","comments":""},
+      queryForm: {"id":"","name":"","kpi":""},
+      kpiForm:{"id":"","employeeId":"","empName":"","dept":"","position":"","kpi":"","leader":"","comments":""},
       tableData: [
-        {"id":"1","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"70"},
-        {"id":"2","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
-        {"id":"3","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
-        {"id":"4","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
-        {"id":"5","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"}
+        {"id":"1","kpiId":"","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"70"},
+        {"id":"2","kpiId":"","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
+        {"id":"3","kpiId":"","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
+        {"id":"4","kpiId":"","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"},
+        {"id":"5","kpiId":"","name":"刘光启","dept":"销售部","position":"讲师","checker":"王大毛","comments":"有功劳","kpi":"30"}
       ]
     }
   },
   methods:{
     queryData(){
-        axios.post('http://localhost:9999/employee/list',{pageNum:this.pageNum,pageSize:this.pageSize,body: this.queryForm}).then(resp=>{
+        axios.post(BASE_API+'/list',{pageNum:this.pageNum,pageSize:this.pageSize,body: this.queryForm}).then(resp=>{
           this.tableData=resp.data.list;
           this.total = resp.data.total;
           this.pageNum =resp.data.pageNum;
@@ -117,12 +117,16 @@ export default {
     },
     showCheckDialog(row){
 
-      this.kpiForm.empId = row.empId;
-      this.kpiForm.empName = row.empName;
+      this.kpiForm.employeeId = row.id;
+      this.kpiForm.empName = row.name;
       this.kpiForm.dept = row.dept;
       this.kpiForm.position = row.position;
-      this.kpiForm.checker = row.manager;
+      this.kpiForm.leader = row.manager;
       this.kpiForm.comments = row.comments;
+      this.kpiForm.id = row.kpiId;
+      // if(!'未考核'== row.kpi){
+        this.kpiForm.kpi = row.kpi;
+      // }
 
       this.visibleDialogKpi = true;
 
@@ -148,7 +152,7 @@ export default {
       axios.get('http://localhost:9999/dept/name',{params: {"name": name}})
           .then(resp=>{
             console.log('查询部门为:'+resp.data)
-            this.kpiForm.checker = resp.data;
+            this.kpiForm.leader = resp.data;
           }).catch(error=>{
               console.log('打印异常日志:'+error);
           })
